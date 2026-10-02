@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.DS_Store
+.icon-cache
+
+# Personal deployment and notes, kept out of the repository
+local/
+CLAUDE.local.md

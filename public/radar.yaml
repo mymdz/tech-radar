@@ -1,0 +1,272 @@
+# An example radar. Everything on the page comes from this file — replace the
+# entries with your own assessments; no code changes needed.
+
+title: Tech Radar
+subtitle: What we use, what we're trying out, and what we're moving away from.
+# Fallback date: when the radar is read from Outline, the document's edit date wins.
+updated: 2026-09-29
+
+# Rotation of the radar, degrees clockwise from 12 o'clock. Optional;
+# by default the first sector is centered at the top.
+# startAngle: 0
+
+# Rings, from the center outwards — as many as you like.
+# color is optional: without it the rings go from dark in the center to light at the edge.
+rings:
+  - id: adopt
+    name: Adopt
+    description: The default choice, proven in production.
+  - id: trial
+    name: Trial
+    description: Used on real work, with some caution.
+  - id: assess
+    name: Assess
+    description: Worth exploring; tried on non-critical projects.
+  - id: hold
+    name: Hold
+    description: Not for new projects.
+
+# Sectors — two or more; the radar is divided equally.
+sectors:
+  - id: languages
+    name: Languages & Frameworks
+  - id: data
+    name: Data
+  - id: infra
+    name: Infrastructure
+  - id: observability
+    name: Observability
+  - id: tools
+    name: Tools
+  - id: ai
+    name: AI
+
+# Entries.
+#   sector, ring — an id or a name from the lists above
+#   icon         — where the picture comes from:
+#                    simple-icons:<slug>        https://simpleicons.org
+#                    iconify:<set>:<name>       https://icon-sets.iconify.design
+#                    devicon:<name>             https://devicon.dev
+#                    favicon:<domain>           the site's favicon
+#                    https://…/logo.svg|png     any image URL
+#                  without an icon, the favicon of the first link is used
+#   iconMode     — auto (default) | silhouette | knockout | monogram
+#   description  — what it is; rationale — why it is in this ring
+#                  (paragraphs, "- " lists, **bold**, `code` and [links](url) work)
+#   link         — the main link (site, docs): a URL or {title, url}
+#   links        — more links, e.g. your own notes:
+#                    links:
+#                      - title: My notes
+#                        url: https://example.com/notes/…
+#   moved        — new | up (towards the center) | down (away from it)
+#   tags         — for search
+#   added        — when the entry appeared on the radar, free text: "September 2026"
+#   updated      — when the assessment was last revisited, optional
+entries:
+  # --- Languages & Frameworks
+  - name: Go
+    sector: languages
+    ring: adopt
+    icon: simple-icons:go
+    description: A compiled language with a simple concurrency model.
+    rationale: |
+      The default for backend work: fast startup, a single binary, predictable performance.
+
+      - services and APIs
+      - CLI tools
+    link: https://go.dev
+    tags: [backend]
+    added: March 2024
+    updated: September 2026
+
+  - name: TypeScript
+    sector: languages
+    ring: adopt
+    icon: simple-icons:typescript
+    description: JavaScript with types.
+    rationale: Everything on the frontend and in Node — the types pay off with the first refactoring.
+    link: https://www.typescriptlang.org
+    tags: [frontend, node]
+
+  - name: Python
+    sector: languages
+    ring: trial
+    icon: simple-icons:python
+    description: Scripts, data analysis, ML.
+    rationale: Great for one-off scripts and notebooks; not for long-running services.
+    link: https://www.python.org
+
+  - name: Rust
+    sector: languages
+    ring: assess
+    icon: simple-icons:rust
+    description: A systems language with memory-safety guarantees.
+    rationale: Considering it for CLIs and hot paths where Go runs into the GC.
+    link: https://www.rust-lang.org
+    moved: new
+
+  - name: PHP
+    sector: languages
+    ring: hold
+    icon: simple-icons:php
+    description: A web backend language.
+    rationale: Maintaining legacy code only; nothing new.
+    link: https://www.php.net
+    moved: down
+
+  # --- Data
+  - name: PostgreSQL
+    sector: data
+    ring: adopt
+    icon: simple-icons:postgresql
+    description: A general-purpose relational database.
+    rationale: The default for any transactional data.
+    link: https://www.postgresql.org
+
+  - name: ClickHouse
+    sector: data
+    ring: trial
+    icon: simple-icons:clickhouse
+    description: A columnar database for analytics.
+    rationale: Aggregates over billions of event rows in seconds.
+    link: https://clickhouse.com
+    moved: up
+
+  - name: DuckDB
+    sector: data
+    ring: assess
+    icon: simple-icons:duckdb
+    description: An embedded analytical database.
+    rationale: Local analysis of CSV and Parquet without running a server.
+    link: https://duckdb.org
+    moved: new
+
+  - name: MongoDB
+    sector: data
+    ring: hold
+    icon: simple-icons:mongodb
+    description: A document database.
+    rationale: Postgres with `jsonb` covers the same cases without a second database in the stack.
+    link: https://www.mongodb.com
+
+  # --- Infrastructure
+  - name: Kubernetes
+    sector: infra
+    ring: adopt
+    icon: iconify:logos:kubernetes
+    description: Container orchestration.
+    rationale: The standard for anything that runs longer than a week.
+    link: https://kubernetes.io
+
+  - name: Terraform
+    sector: infra
+    ring: adopt
+    icon: simple-icons:terraform
+    description: Infrastructure as code.
+    rationale: |
+      Everything in the cloud is described in code; nothing is clicked together in a console.
+
+      - shared modules for networks and clusters
+      - plans reviewed in merge requests
+    link: https://www.terraform.io
+    tags: [iac, cloud]
+    added: January 2025
+    updated: September 2026
+
+  - name: Argo CD
+    sector: infra
+    ring: trial
+    icon: simple-icons:argo
+    description: GitOps deployments to Kubernetes.
+    link: https://argo-cd.readthedocs.io
+
+  - name: Nginx
+    sector: infra
+    ring: hold
+    icon: iconify:logos:nginx
+    description: A web server and reverse proxy.
+    rationale: |
+      Replaced by managed load balancers and ingress controllers.
+
+      - in Kubernetes: Gateway API
+      - in the cloud: ALB/NLB
+    link: https://nginx.org
+
+  # --- Observability
+  - name: Grafana
+    sector: observability
+    ring: adopt
+    icon: simple-icons:grafana
+    description: Dashboards and alerts.
+    link: https://grafana.com
+
+  - name: OpenTelemetry
+    sector: observability
+    ring: trial
+    icon: simple-icons:opentelemetry
+    description: An open standard for traces, metrics and logs.
+    rationale: New services are instrumented with OTel only, to stay vendor-neutral.
+    link: https://opentelemetry.io
+    moved: up
+
+  - name: ELK
+    sector: observability
+    ring: hold
+    icon: simple-icons:elastic
+    description: Elasticsearch, Logstash and Kibana for logs.
+    rationale: Expensive to operate; logs moved to Loki and ClickHouse.
+    link: https://www.elastic.co
+
+  # --- Tools
+  - name: VS Code
+    sector: tools
+    ring: adopt
+    icon: iconify:logos:visual-studio-code
+    description: A lightweight editor with extensions.
+    link: https://code.visualstudio.com
+
+  - name: GitLab CI
+    sector: tools
+    ring: trial
+    icon: simple-icons:gitlab
+    description: CI/CD built into GitLab.
+    link: https://docs.gitlab.com/ee/ci/
+
+  - name: Jira
+    sector: tools
+    ring: hold
+    icon: simple-icons:jira
+    description: An issue tracker.
+    rationale: Too heavy for a small team.
+    link: https://www.atlassian.com/software/jira
+
+  # --- AI
+  - name: Claude Code
+    sector: ai
+    ring: adopt
+    icon: simple-icons:claude
+    description: An agentic coding tool in the terminal.
+    link: https://claude.com/claude-code
+    moved: new
+
+  - name: MCP
+    sector: ai
+    ring: trial
+    icon: simple-icons:modelcontextprotocol
+    description: Model Context Protocol — a standard way to connect tools to LLMs.
+    rationale: Connects your own services to agents without a separate integration for each.
+    link: https://modelcontextprotocol.io
+
+  - name: Mastra
+    sector: ai
+    ring: assess
+    description: A TypeScript framework for AI agents and workflows.
+    rationale: No icon set — the radar uses the site's favicon.
+    link: https://mastra.ai
+
+  - name: Ollama
+    sector: ai
+    ring: assess
+    icon: simple-icons:ollama
+    description: Run open LLMs locally.
+    link: https://ollama.com

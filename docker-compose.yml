@@ -1,0 +1,35 @@
+# docker compose up --build  →  http://localhost:8080
+#
+# Without OUTLINE_* the server serves RADAR_FILE: the bundled example, or your own
+# file (see the commented lines below). To read the radar
+# from an Outline document instead, set OUTLINE_BASE_URL and either
+# OUTLINE_SHARE_ID (a public share) or OUTLINE_API_TOKEN + OUTLINE_DOCUMENT_ID,
+# e.g. in a .env file next to this one.
+services:
+  tech-radar:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      OUTLINE_BASE_URL: ${OUTLINE_BASE_URL:-}
+      OUTLINE_SHARE_ID: ${OUTLINE_SHARE_ID:-}
+      OUTLINE_API_TOKEN: ${OUTLINE_API_TOKEN:-}
+      OUTLINE_DOCUMENT_ID: ${OUTLINE_DOCUMENT_ID:-}
+      CACHE_TTL_SECONDS: ${CACHE_TTL_SECONDS:-30}
+      # Your own radar instead of the example, from the ./data mount below.
+      # RADAR_FILE: /data/radar.yaml
+    # The icon cache is the only thing the server writes.
+    volumes:
+      - icon-cache:/app/icon-cache
+      # A directory, not the file itself: editors that save by renaming would
+      # leave a single-file mount pointing at the old version.
+      # - ./data:/data:ro
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  icon-cache:

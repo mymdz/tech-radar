@@ -1,0 +1,9 @@
+node_modules
+dist
+local
+.env
+.git
+.idea
+.DS_Store
+.icon-cache
+CLAUDE.local.md
