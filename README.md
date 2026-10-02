@@ -37,10 +37,12 @@ The page loads `radar.yaml` from next to itself — that is all the setup there 
   the browser then fetches icons from their sources itself.
 - **The bundled server**: serves the file at `RADAR_FILE` (the built `dist/radar.yaml`
   by default) and picks up edits on the next page load.
-- **Docker**: mount a directory with your file and point `RADAR_FILE` at it —
-  `-v ./data:/data:ro -e RADAR_FILE=/data/radar.yaml`, or uncomment the lines in
-  `docker-compose.yml`. Mount the directory rather than the file: editors that save
-  by renaming would leave a single-file mount on the old version.
+- **Docker**: mount a directory with your file and point `RADAR_FILE` at it:
+  ```sh
+  docker run -p 8080:8080 -v ./data:/data:ro -e RADAR_FILE=/data/radar.yaml ghcr.io/mymdz/tech-radar
+  ```
+  or uncomment the lines in `docker-compose.yml`. Mount the directory rather than the
+  file: editors that save by renaming would leave a single-file mount on the old version.
 
 Other sources:
 
@@ -65,8 +67,9 @@ from their sources.
 build step (Node 24 runs the TypeScript directly).
 
 ```sh
-npm run build && npm start      # http://localhost:8080
-docker compose up --build       # the same in a container
+npm run build && npm start                        # http://localhost:8080
+docker run -p 8080:8080 ghcr.io/mymdz/tech-radar  # the published image (amd64, arm64)
+docker compose up --build                         # built from source
 ```
 
 | Variable | Default | |
@@ -90,6 +93,10 @@ npm test               # typecheck + tests
 npm run check:icons    # check that every icon in a radar file loads
 make docker-build      # build and push an image: IMAGE=registry/name PLATFORM=linux/arm64
 ```
+
+Images for amd64 and arm64 are published to `ghcr.io/mymdz/tech-radar` by
+[a workflow](.github/workflows/docker.yml): `latest` from `main`, a version for each
+`v*` tag. Pull requests are built and tested but not published.
 
 ```
 src/
