@@ -41,7 +41,7 @@ The page loads `radar.yaml` from next to itself — that is all the setup there 
   ```sh
   docker run -p 8080:8080 -v ./data:/data:ro -e RADAR_FILE=/data/radar.yaml ghcr.io/mymdz/tech-radar
   ```
-  or uncomment the lines in `docker-compose.yml`. Mount the directory rather than the
+  or use the [Compose file](#docker-compose) below. Mount the directory rather than the
   file: editors that save by renaming would leave a single-file mount on the old version.
 
 Other sources:
@@ -71,6 +71,38 @@ npm run build && npm start                        # http://localhost:8080
 docker run -p 8080:8080 ghcr.io/mymdz/tech-radar  # the published image (amd64, arm64)
 docker compose up --build                         # built from source
 ```
+
+### Docker Compose
+
+With the published image and your own `data/radar.yaml`:
+
+```yaml
+services:
+  tech-radar:
+    image: ghcr.io/mymdz/tech-radar
+    ports:
+      - "8080:8080"
+    environment:
+      RADAR_FILE: /data/radar.yaml
+      # Or read the radar from Outline instead:
+      # OUTLINE_BASE_URL: https://outline.example.com
+      # OUTLINE_SHARE_ID: <share id>
+    volumes:
+      - ./data:/data:ro              # your radar.yaml
+      - icon-cache:/app/icon-cache   # keeps the icon cache across restarts
+    # The image already runs as a non-root user; these take away the rest.
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  icon-cache:
+```
+
+### Configuration
 
 | Variable | Default | |
 |---|---|---|
